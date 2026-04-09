@@ -16,4 +16,19 @@ class MessagesNotifier extends _$MessagesNotifier {
   Future<void> refreshMessages(String channelId) async {
     ref.invalidateSelf();
   }
+
+  Future<Message> sendMessage({
+    required String channelId,
+    required String content,
+    required String userId,
+  }) async {
+    final repo = await ref.read(channelsRepositoryProvider.future);
+
+    final message = await repo.sendMessage(
+      channelId: channelId,
+      content: content,
+      userId: userId,
+    );
+    return message;
+  }
 }

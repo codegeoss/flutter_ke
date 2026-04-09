@@ -54,6 +54,7 @@ class ChannelsRepository {
   Future<Message> sendMessage({
     required String channelId,
     required String content,
+    required String userId,
   }) async {
     try {
       final response = await client
@@ -61,6 +62,7 @@ class ChannelsRepository {
           .insert({
             'channel_id': channelId,
             'content': content,
+            'user_id': userId,
           })
           .select()
           .single();
