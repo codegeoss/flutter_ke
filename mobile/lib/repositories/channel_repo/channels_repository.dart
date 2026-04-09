@@ -29,17 +29,21 @@ class ChannelsRepository {
     }
   }
 
-  Future<List<Message>> fetchMessages(String channelId) async {
+  Stream<List<Message>> fetchMessages(String channelId) {
     try {
-      final response = await client
+      final response = client
           .from('messages')
-          .select()
+          .stream(primaryKey: ['id'])
           .eq('channel_id', channelId)
-          .eq('is_deleted', false)
-          .order('created_at');
-      return (response as List)
-          .map((json) => Message.fromJson(json as Map<String, dynamic>))
-          .toList();
+          .order('created_at')
+          .map(
+            (rows) => rows
+                .map(Message.fromJson)
+                .where((msg) => !msg.isDeleted)
+                .toList(),
+          );
+
+      return response;
     } on Exception catch (_) {
       throw ChannelsRepositoryException(
         'Failed to fetch messages',
