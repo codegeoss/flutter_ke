@@ -257,6 +257,7 @@ class MessagesList extends StatelessWidget {
           sender: user?.id == message.userId ? 'Me' : 'Other',
           text: message.content ?? '',
           isMe: user?.id == message.userId,
+          time: message.createdAt ?? DateTime.now(),
         );
       },
     );
