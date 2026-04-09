@@ -98,22 +98,29 @@ class MessageInputBar extends HookConsumerWidget {
                   horizontal: 20,
                   vertical: 14,
                 ),
-                suffixIcon: SizedBox.square(
-                  dimension: 24,
-                  child: InkWell(
-                    onTap: switch (messageState) {
-                      MutationPending() => null,
-                      _ => () async => sendMessage(),
-                    },
-                    borderRadius: BorderRadius.circular(20),
-                    child: switch (messageState) {
-                      MutationPending() => LoadingIndicator(
-                        color: theme.colorScheme.tertiary,
-                      ),
-                      _ => const Icon(Icons.send),
-                    },
+                suffixIcon: switch (messageState) {
+                  MutationPending() => Container(
+                    width: 24,
+                    height: 24,
+                    alignment: .center,
+                    decoration: BoxDecoration(
+                      shape: .circle,
+                      color: theme.colorScheme.tertiary,
+                    ),
+                    child: const LoadingIndicator(),
                   ),
-                ),
+                  _ => SizedBox.square(
+                    dimension: 24,
+                    child: InkWell(
+                      onTap: switch (messageState) {
+                        MutationPending() => null,
+                        _ => () async => sendMessage(),
+                      },
+                      borderRadius: BorderRadius.circular(20),
+                      child: const Icon(Icons.send),
+                    ),
+                  ),
+                },
               ),
               minLines: 1,
               maxLines: 5,
